@@ -2,21 +2,19 @@ package stores
 
 import (
 	"fmt"
-	"maps"
 	"math"
-	"slices"
+	"math/rand"
 	"sync"
 
 	"github.com/NikitaBogoslovskiy/quotes/internal/types"
-	"golang.org/x/exp/rand"
 )
 
 type QuotesStore interface {
 	Create(author types.Author, quote types.Quote) (types.Id, error)
 	GetAll() ([]types.QuoteData, error)
+	GetByAuthor(author types.Author) ([]types.QuoteData, error)
 	GetRandom() (types.QuoteData, error)
-	GetByAuthor(author types.Author) (types.QuoteData, error)
-	DeleteById(id types.Id) error
+	Delete(id types.Id) error
 }
 
 type quotesStore struct {
@@ -26,18 +24,15 @@ type quotesStore struct {
 }
 
 func NewQuotesStore() QuotesStore {
-	return &quotesStore{
-		currId: 0,
-		data:   make(map[types.Id]types.QuoteData),
-	}
+	return &quotesStore{data: make(map[types.Id]types.QuoteData)}
 }
 
 func (qs *quotesStore) Create(author types.Author, quote types.Quote) (types.Id, error) {
 	qs.mtx.Lock()
 	defer qs.mtx.Unlock()
 
-	if qs.currId == math.MaxInt64 {
-		return 0, fmt.Errorf("Space limit exceeded") // in real-life case it is better to use database and uuid instead of integer ids
+	if qs.currId == math.MaxUint64 {
+		return 0, fmt.Errorf("space limit exceeded")
 	}
 	qs.currId++
 
@@ -54,7 +49,26 @@ func (qs *quotesStore) GetAll() ([]types.QuoteData, error) {
 	qs.mtx.Lock()
 	defer qs.mtx.Unlock()
 
-	return slices.Collect(maps.Values(qs.data)), nil
+	quotes := make([]types.QuoteData, 0, len(qs.data))
+	for _, quote := range qs.data {
+		quotes = append(quotes, quote)
+	}
+
+	return quotes, nil
+}
+
+func (qs *quotesStore) GetByAuthor(author types.Author) ([]types.QuoteData, error) {
+	qs.mtx.Lock()
+	defer qs.mtx.Unlock()
+
+	quotes := make([]types.QuoteData, 0)
+	for _, quote := range qs.data {
+		if quote.Author == author {
+			quotes = append(quotes, quote)
+		}
+	}
+
+	return quotes, nil
 }
 
 func (qs *quotesStore) GetRandom() (types.QuoteData, error) {
@@ -63,7 +77,7 @@ func (qs *quotesStore) GetRandom() (types.QuoteData, error) {
 
 	quotesNumber := len(qs.data)
 	if quotesNumber == 0 {
-		return types.QuoteData{}, fmt.Errorf("No quotes to retrieve")
+		return types.QuoteData{}, fmt.Errorf("no quotes to retrieve")
 	}
 
 	randomIdx := rand.Intn(quotesNumber)
@@ -74,31 +88,18 @@ func (qs *quotesStore) GetRandom() (types.QuoteData, error) {
 		randomIdx--
 	}
 
-	return types.QuoteData{}, fmt.Errorf("Internal server error")
+	return types.QuoteData{}, fmt.Errorf("internal server error")
 }
 
-func (qs *quotesStore) GetByAuthor(author types.Author) (types.QuoteData, error) {
-	qs.mtx.Lock()
-	defer qs.mtx.Unlock()
-
-	for _, quote := range qs.data {
-		if quote.Author == author {
-			return quote, nil
-		}
-	}
-
-	return types.QuoteData{}, fmt.Errorf("No quote was found")
-}
-
-func (qs *quotesStore) DeleteById(id types.Id) error {
+func (qs *quotesStore) Delete(id types.Id) error {
 	qs.mtx.Lock()
 	defer qs.mtx.Unlock()
 
 	_, ok := qs.data[id]
 	if !ok {
-		return fmt.Errorf("No quote with specified id")
+		return fmt.Errorf("no quote with specified id")
 	}
 
-	delete(qs.data, id) // we can perform delete without upper check but it is better to handle the case when id does not exist
+	delete(qs.data, id)
 	return nil
 }

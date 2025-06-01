@@ -2,11 +2,11 @@ package types
 
 import "fmt"
 
-type Id int64
+type Id uint64
 
 func (id Id) Validate() error {
-	if id <= 0 {
-		return fmt.Errorf("Id cannot be non-positive")
+	if id == 0 {
+		return fmt.Errorf("id cannot be zero")
 	}
 
 	return nil
@@ -16,7 +16,7 @@ type Author string
 
 func (a Author) Validate() error {
 	if len(a) == 0 {
-		return fmt.Errorf("Author field cannot be empty")
+		return fmt.Errorf("author cannot be empty")
 	}
 
 	return nil
@@ -26,7 +26,7 @@ type Quote string
 
 func (q Quote) Validate() error {
 	if len(q) == 0 {
-		return fmt.Errorf("Quote field cannot be empty")
+		return fmt.Errorf("quote cannot be empty")
 	}
 
 	return nil
@@ -63,10 +63,10 @@ type CreateQuoteResponse struct {
 	Id      Id     `json:"id,omitempty"`
 }
 
-type GetAllQuotesResponse struct {
+type GetQuotesResponse struct {
 	Ok      bool        `json:"ok"`
 	Message string      `json:"message,omitempty"`
-	Quotes  []QuoteData `json:"quotes,omitempty"`
+	Quotes  []QuoteData `json:"quotes"`
 }
 
 type GetRandomQuoteResponse struct {
@@ -75,13 +75,7 @@ type GetRandomQuoteResponse struct {
 	Quote   QuoteData `json:"quote,omitempty"`
 }
 
-type GetQuoteByAuthorResponse struct {
-	Ok      bool      `json:"ok"`
-	Message string    `json:"message,omitempty"`
-	Quote   QuoteData `json:"quote,omitempty"`
-}
-
-type DeleteQuoteByIdResponse struct {
+type DeleteQuoteResponse struct {
 	Ok      bool   `json:"ok"`
 	Message string `json:"message,omitempty"`
 }
