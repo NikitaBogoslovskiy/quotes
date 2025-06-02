@@ -77,8 +77,7 @@ func TestCreate(t *testing.T) {
 			handler.ServeHTTP(rr, req)
 
 			if rr.Body.String() != tc.expected {
-				t.Errorf("handler returned unexpected body: got %v want %v",
-					rr.Body.String(), tc.expected)
+				t.Errorf("handler returned unexpected body: got %v want %v", rr.Body.String(), tc.expected)
 			}
 		})
 	}
@@ -138,8 +137,7 @@ func TestGet(t *testing.T) {
 			handler.ServeHTTP(rr, req)
 
 			if rr.Body.String() != tc.expected {
-				t.Errorf("handler returned unexpected body: got %v want %v",
-					rr.Body.String(), tc.expected)
+				t.Errorf("handler returned unexpected body: got %v want %v", rr.Body.String(), tc.expected)
 			}
 		})
 	}
@@ -170,8 +168,7 @@ func TestGetRandom(t *testing.T) {
 			handler.ServeHTTP(rr, req)
 
 			if rr.Body.String() != tc.expected {
-				t.Errorf("handler returned unexpected body: got %v want %v",
-					rr.Body.String(), tc.expected)
+				t.Errorf("handler returned unexpected body: got %v want %v", rr.Body.String(), tc.expected)
 			}
 		})
 	}
@@ -220,8 +217,7 @@ func TestDelete(t *testing.T) {
 			handler.ServeHTTP(rr, req)
 
 			if rr.Body.String() != tc.expected {
-				t.Errorf("handler returned unexpected body: got %v want %v",
-					rr.Body.String(), tc.expected)
+				t.Errorf("handler returned unexpected body: got %v want %v", rr.Body.String(), tc.expected)
 			}
 		})
 	}

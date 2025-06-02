@@ -63,8 +63,7 @@ func TestCreate(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			got := quotesService.Create(tc.input)
 			if got != tc.expected {
-				t.Errorf("service returned unexpected response: got %v want %v",
-					got, tc.expected)
+				t.Errorf("service returned unexpected response: got %v want %v", got, tc.expected)
 			}
 		})
 	}
@@ -110,8 +109,7 @@ func TestGet(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			got := quotesService.Get(tc.input)
 			if !responsesEqual(got, tc.expected) {
-				t.Errorf("service returned unexpected response: got %v want %v",
-					got, tc.expected)
+				t.Errorf("service returned unexpected response: got %v want %v", got, tc.expected)
 			}
 		})
 	}
@@ -134,8 +132,7 @@ func TestGetRandom(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			got := quotesService.GetRandom()
 			if got != tc.expected {
-				t.Errorf("service returned unexpected response: got %v want %v",
-					got, tc.expected)
+				t.Errorf("service returned unexpected response: got %v want %v", got, tc.expected)
 			}
 		})
 	}
@@ -165,8 +162,7 @@ func TestDelete(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			got := quotesService.Delete(tc.input)
 			if got != tc.expected {
-				t.Errorf("service returned unexpected response: got %v want %v",
-					got, tc.expected)
+				t.Errorf("service returned unexpected response: got %v want %v", got, tc.expected)
 			}
 		})
 	}
