@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/NikitaBogoslovskiy/quotes/cmd/routes"
@@ -16,6 +17,8 @@ func main() {
 	})
 	service.LoadRoutes(router)
 
+	port := 8080
 	http.Handle("/", router)
-	http.ListenAndServe(":8080", nil)
+	fmt.Printf("Start listening to %d port...\n", port)
+	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 }
