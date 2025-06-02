@@ -29,17 +29,17 @@ func NewQuotesHandler(quotesService services.QuotesService) QuotesHandler {
 func (qh *quotesHandler) Create(w http.ResponseWriter, r *http.Request) {
 	requestBody, err := io.ReadAll(r.Body)
 	if err != nil {
-		errorRsponse, _ := json.Marshal(types.CreateQuoteResponse{Ok: false, Message: "internal server error"})
+		errorResponse, _ := json.Marshal(types.CreateQuoteResponse{Ok: false, Message: "internal server error"})
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(errorRsponse)
+		w.Write(errorResponse)
 		return
 	}
 
 	request := types.CreateQuoteRequest{}
 	err = json.Unmarshal(requestBody, &request)
 	if err != nil {
-		errorRsponse, _ := json.Marshal(types.CreateQuoteResponse{Ok: false, Message: "incorrect request format"})
-		w.Write(errorRsponse)
+		errorResponse, _ := json.Marshal(types.CreateQuoteResponse{Ok: false, Message: "incorrect request format"})
+		w.Write(errorResponse)
 		return
 	}
 
@@ -47,9 +47,9 @@ func (qh *quotesHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	responseBody, err := json.Marshal(response)
 	if err != nil {
-		errorRsponse, _ := json.Marshal(types.CreateQuoteResponse{Ok: false, Message: "internal server error"})
+		errorResponse, _ := json.Marshal(types.CreateQuoteResponse{Ok: false, Message: "internal server error"})
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(errorRsponse)
+		w.Write(errorResponse)
 		return
 	}
 
@@ -63,9 +63,9 @@ func (qh *quotesHandler) Get(w http.ResponseWriter, r *http.Request) {
 
 	responseBody, err := json.Marshal(response)
 	if err != nil {
-		errorRsponse, _ := json.Marshal(types.GetQuotesResponse{Ok: false, Message: "internal server error"})
+		errorResponse, _ := json.Marshal(types.GetQuotesResponse{Ok: false, Message: "internal server error"})
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(errorRsponse)
+		w.Write(errorResponse)
 		return
 	}
 
@@ -77,9 +77,9 @@ func (qh *quotesHandler) GetRandom(w http.ResponseWriter, r *http.Request) {
 
 	responseBody, err := json.Marshal(response)
 	if err != nil {
-		errorRsponse, _ := json.Marshal(types.GetRandomQuoteResponse{Ok: false, Message: "internal server error"})
+		errorResponse, _ := json.Marshal(types.GetRandomQuoteResponse{Ok: false, Message: "internal server error"})
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(errorRsponse)
+		w.Write(errorResponse)
 		return
 	}
 
@@ -91,8 +91,8 @@ func (qh *quotesHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	idStr := vars["id"]
 	id, err := strconv.ParseUint(idStr, 10, 64)
 	if err != nil {
-		errorRsponse, _ := json.Marshal(types.DeleteQuoteResponse{Ok: false, Message: "id should be a non-negative number"})
-		w.Write(errorRsponse)
+		errorResponse, _ := json.Marshal(types.DeleteQuoteResponse{Ok: false, Message: "id should be a non-negative number"})
+		w.Write(errorResponse)
 		return
 	}
 
@@ -100,9 +100,9 @@ func (qh *quotesHandler) Delete(w http.ResponseWriter, r *http.Request) {
 
 	responseBody, err := json.Marshal(response)
 	if err != nil {
-		errorRsponse, _ := json.Marshal(types.DeleteQuoteResponse{Ok: false, Message: "internal server error"})
+		errorResponse, _ := json.Marshal(types.DeleteQuoteResponse{Ok: false, Message: "internal server error"})
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write(errorRsponse)
+		w.Write(errorResponse)
 		return
 	}
 
